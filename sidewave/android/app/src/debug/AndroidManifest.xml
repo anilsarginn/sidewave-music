@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <!-- AAOS preview harness for the shared media browser; not part of the phone release. -->
+    <application android:appCategory="audio">
+        <meta-data android:name="com.google.android.gms.car.application" tools:node="remove" />
+        <meta-data android:name="com.android.automotive" android:resource="@xml/automotive_app_desc" />
+        <activity android:name=".MainActivity">
+            <intent-filter tools:node="removeAll" />
+        </activity>
+    </application>
+</manifest>

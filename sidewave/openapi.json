@@ -1,0 +1,5804 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Sidewave API",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/api/v1/catalog/search": {
+      "get": {
+        "summary": "Birleşik şarkı, albüm ve sanatçı araması",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parcalar": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parca"
+                      }
+                    },
+                    "albumler": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "ad": {
+                            "type": "string"
+                          },
+                          "kaynak": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "sanatcilar": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "ad": {
+                            "type": "string"
+                          },
+                          "kaynak": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "hata": {
+                      "type": "object",
+                      "properties": {
+                        "kutuphane": {
+                          "type": "string"
+                        },
+                        "youtube": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/playback/resolve": {
+      "post": {
+        "summary": "Kaynağı seç ve imzalı kaynak URL’sini dışarı vermeden akış yolu üret",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResolveResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playback/prefetch": {
+      "post": {
+        "summary": "Sıradaki tek parçayı önceden çözümle",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parcalar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Parca"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events": {
+      "post": {
+        "summary": "Tekrarlanabilir id ile oynatma olayını kaydet",
+        "responses": {
+          "201": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaybackEvent"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/history": {
+      "get": {
+        "summary": "history",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parcalar": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parca"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/recommendations": {
+      "get": {
+        "summary": "recommendations",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parcalar": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parca"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/favorites": {
+      "get": {
+        "summary": "favorites",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parcalar": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parca"
+                      }
+                    },
+                    "albumler": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Album"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/radio": {
+      "post": {
+        "summary": "Parçadan radyo üret",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parcalar": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parca"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/recommendations/dismiss": {
+      "post": {
+        "summary": "Parçayı önerilerden gizle",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Undo not for me",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "parca"
+                ],
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  },
+                  "scope": {
+                    "type": "string",
+                    "enum": [
+                      "track",
+                      "artist"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/devices": {
+      "get": {
+        "summary": "Cihazlar ve etkin oturum",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "devices": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Device"
+                      }
+                    },
+                    "activeDeviceId": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "takeoverAt": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/devices/{id}": {
+      "put": {
+        "summary": "Cihaz durumunu kaydet; etkin oturumu değiştirme",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/devices/{id}/takeover": {
+      "post": {
+        "summary": "Etkin sırayı ve konumu bu cihaza aktar",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/preview": {
+      "post": {
+        "summary": "CSV/M3U/metin listesini eşleştirme önizlemesi",
+        "responses": {
+          "202": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jobId": {
+                      "type": "string"
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ImportRow"
+                      }
+                    },
+                    "duplicates": {
+                      "type": "integer"
+                    },
+                    "pending": {
+                      "type": "boolean"
+                    },
+                    "completed": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "format": {
+                    "type": "string",
+                    "enum": [
+                      "csv",
+                      "m3u",
+                      "text"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/import/commit": {
+      "post": {
+        "summary": "Seçilmiş parçaları liste olarak kaydet; indirme başlatma",
+        "responses": {
+          "201": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "parcalar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Parca"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/archive/jobs": {
+      "get": {
+        "summary": "Kalıcı arşiv işleri",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jobs": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ArchiveJob"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/archive/jobs/{id}/select": {
+      "post": {
+        "summary": "Belirsiz arşiv eşleşmesini seç",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchiveJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "candidateId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/arsive-ekle": {
+      "post": {
+        "summary": "Seçilen parçayı arşive ekle",
+        "responses": {
+          "202": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/arsive-ekle/{id}": {
+      "get": {
+        "summary": "Arşiv işi durumu",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchiveJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/listeler": {
+      "get": {
+        "summary": "Karma kaynaklı listeler",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "listeler": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Playlist"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playlists": {
+      "get": {
+        "summary": "Karma kaynaklı listeler",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "listeler": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Playlist"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/liste": {
+      "post": {
+        "summary": "Liste oluştur",
+        "responses": {
+          "201": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ad": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/liste/{id}": {
+      "get": {
+        "summary": "Liste ve sıralı öğeler",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Liste adı veya tam öğe sırası",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ad": {
+                    "type": "string"
+                  },
+                  "entryIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Listeyi sil",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/liste/{id}/ekle": {
+      "post": {
+        "summary": "Kaynak bağımsız çoklu ekleme",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parcalar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Parca"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/liste/{id}/cikar": {
+      "post": {
+        "summary": "Tek bir liste öğesini çıkar",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "entryId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/favoriler": {
+      "get": {
+        "summary": "Beğeniler",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parcalar": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parca"
+                      }
+                    },
+                    "albumler": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Album"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/favori": {
+      "post": {
+        "summary": "Kaynak bağımsız beğeni",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "parca": {
+                      "$ref": "#/components/schemas/Parca"
+                    },
+                    "favori": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  },
+                  "favori": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/import/preview/{id}": {
+      "get": {
+        "summary": "Aktarım eşleştirme ilerlemesi",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jobId": {
+                      "type": "string"
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ImportRow"
+                      }
+                    },
+                    "duplicates": {
+                      "type": "integer"
+                    },
+                    "pending": {
+                      "type": "boolean"
+                    },
+                    "completed": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Aktarımı iptal et",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/library": {
+      "get": {
+        "summary": "Takip edilen sanatçılar ve kaydedilen albümler",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Library"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/artists/{source}/{id}": {
+      "get": {
+        "summary": "Sağlayıcı kimliğinden kalıcı profil al; kaynak hatasında işaretli önbellek",
+        "parameters": [
+          {
+            "name": "source",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "kutuphane",
+                "youtube"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        }
+      }
+    },
+    "/api/v1/artists/{id}": {
+      "get": {
+        "summary": "Sidewave kimliğinden profil al",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        }
+      }
+    },
+    "/api/v1/artists/{id}/follow": {
+      "put": {
+        "summary": "Takip veya kütüphane seçimini kalıcı değiştir",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "takip": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "takip"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/albums/{source}/{id}": {
+      "get": {
+        "summary": "Sağlayıcı kimliğinden kalıcı profil al; kaynak hatasında işaretli önbellek",
+        "parameters": [
+          {
+            "name": "source",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "kutuphane",
+                "youtube"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        }
+      }
+    },
+    "/api/v1/albums/{id}": {
+      "get": {
+        "summary": "Sidewave kimliğinden profil al",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        }
+      }
+    },
+    "/api/v1/albums/{id}/save": {
+      "put": {
+        "summary": "Takip veya kütüphane seçimini kalıcı değiştir",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "kayitli": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kayitli"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/artists/{id}/releases": {
+      "get": {
+        "summary": "Yayımları filtrele ve sayfala; complete yalnız sağlayıcının tamamlığı biliniyorsa true",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "album",
+                "single"
+              ]
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "newest",
+                "oldest",
+                "name"
+              ]
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "YouTube kataloğunda her tür için en fazla 200 yayım getirir; sınırda complete=false."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleasePage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "404": {
+            "description": "Kayıt bulunamadı"
+          },
+          "502": {
+            "description": "Katalog kaynağına ulaşılamadı"
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/capabilities": {
+      "get": {
+        "summary": "Eklenti desteği ve ayrı analiz kapsamı",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sonuç; arşiv veya analiz eksikliği açıkça bildirilir. Kuyruk değiştirilmez.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryCapabilities"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Arşiv kopyası veya rota eksik"
+          },
+          "503": {
+            "description": "Ses analizi servisi hazır değil"
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/similar-tracks": {
+      "post": {
+        "summary": "Doğrulanmış arşiv kaynaklarıyla ses keşfi; aktif kuyruğu değiştirmez",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sonuç; arşiv veya analiz eksikliği açıkça bildirilir. Kuyruk değiştirilmez.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Arşiv kopyası veya rota eksik"
+          },
+          "503": {
+            "description": "Ses analizi servisi hazır değil"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "parca"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/instant-mix": {
+      "post": {
+        "summary": "Doğrulanmış arşiv kaynaklarıyla ses keşfi; aktif kuyruğu değiştirmez",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sonuç; arşiv veya analiz eksikliği açıkça bildirilir. Kuyruk değiştirilmez.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Arşiv kopyası veya rota eksik"
+          },
+          "503": {
+            "description": "Ses analizi servisi hazır değil"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "parca"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/path": {
+      "post": {
+        "summary": "Başlangıcı, bitişi ve sağlayıcı sırasını koruyan ses rotası",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sonuç; arşiv veya analiz eksikliği açıkça bildirilir. Kuyruk değiştirilmez.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Arşiv kopyası veya rota eksik"
+          },
+          "503": {
+            "description": "Ses analizi servisi hazır değil"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "$ref": "#/components/schemas/Parca"
+                  },
+                  "end": {
+                    "$ref": "#/components/schemas/Parca"
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/artists/{id}": {
+      "get": {
+        "summary": "Arşivdeki sanatçının sesçe benzerlerini bul",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sonuç; arşiv veya analiz eksikliği açıkça bildirilir. Kuyruk değiştirilmez.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Arşiv kopyası veya rota eksik"
+          },
+          "503": {
+            "description": "Ses analizi servisi hazır değil"
+          }
+        }
+      }
+    },
+    "/api/v1/library/releases": {
+      "get": {
+        "summary": "Takip edilen ilk 20 sanatçının yayımları; kaynak hatasında işaretli son alınan veriler",
+        "responses": {
+          "200": {
+            "description": "Sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseFeed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/analysis": {
+      "get": {
+        "summary": "Kalıcı ses analizi gönderim durumu; tamamlanma iddiası değildir",
+        "responses": {
+          "200": {
+            "description": "Sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisJob"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Arşivi analiz için sıraya al; dinlenen çevrimiçi kayıtları indirmez",
+        "responses": {
+          "202": {
+            "description": "Sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisJob"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/import/spotify/jobs": {
+      "get": {
+        "summary": "Kalıcı Spotify aktarımları",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jobs": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SpotifyImportJob"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/import/spotify/upload": {
+      "post": {
+        "summary": "Exportify CSV / ZIP veya Spotify hesap verileri JSON / ZIP yükle; kalıcı eşleştirmeyi başlat",
+        "responses": {
+          "202": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "label",
+            "schema": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "description": "Aynı hesabı yeniden aktarırken aynı etiket kullanılır."
+          },
+          {
+            "in": "query",
+            "name": "fileName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Tek CSV dosyasının adı; listede gösterilecek adı ve dosya türünü belirler."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/zip": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "text/csv": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}": {
+      "get": {
+        "summary": "İlerleme, listeler ve eksikler",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}/rows": {
+      "get": {
+        "summary": "50 kayıtlık eşleştirme sayfası",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportPage"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "collectionId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "review",
+                "selected"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}/pause": {
+      "post": {
+        "summary": "Eşleştirmeyi duraklat",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}/resume": {
+      "post": {
+        "summary": "Bekleyen kayıtları sürdür; retry=true kaynak hatası / bulunamayan kayıtları yeniden arar",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "retry": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}/commit": {
+      "post": {
+        "summary": "Seçilenleri listelere ve beğenilere ekle; yeniden çalıştırmada çoğaltmaz, indirme başlatmaz",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}/rows/{rowId}": {
+      "patch": {
+        "summary": "Kayıt adaylarından açık seçim yap veya null ile atla",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "candidate"
+                ],
+                "properties": {
+                  "candidate": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}/favorites-file": {
+      "patch": {
+        "summary": "CSV dosyalarından hangisinin beğeniler olduğunu açıkça seç; null ile geri al. Kaydedilmiş aktarımda değişmez.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "collectionId"
+                ],
+                "properties": {
+                  "collectionId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Güncel aktarım",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/android/update": {
+      "get": {
+        "summary": "Son imzalı Android sürümü; tamamlanmış APK boyutu ve SHA-256 sunucuda doğrulanır.",
+        "responses": {
+          "200": {
+            "description": "İmzalı Android yayını",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AndroidRelease"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yayın yok veya dosya hazır değil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/playback/prepare": {
+      "post": {
+        "summary": "Aktif veya sıradaki kayıt için paylaşılan ses hazırlığına abone ol",
+        "responses": {
+          "202": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preparation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parca": {
+                    "$ref": "#/components/schemas/Parca"
+                  },
+                  "priority": {
+                    "type": "string",
+                    "enum": [
+                      "playback",
+                      "next"
+                    ]
+                  }
+                },
+                "required": [
+                  "parca"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playback/preparations/{id}": {
+      "get": {
+        "summary": "Hazırlık durumunu oku / yalnız bu aboneliği iptal et",
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preparation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Hazırlık durumunu oku / yalnız bu aboneliği iptal et",
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preparation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/cache": {
+      "get": {
+        "summary": "Sunucu geçici ses kullanımı",
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Sunucu ses önbelleği ayarları",
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "capacityBytes": {
+                    "type": "number"
+                  }
+                },
+                "required": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cache/unused": {
+      "delete": {
+        "summary": "Çalan kayıtları koruyarak geçici sesleri temizle",
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "removed": {
+                      "type": "number"
+                    },
+                    "usedBytes": {
+                      "type": "number"
+                    }
+                  },
+                  "required": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        }
+      }
+    },
+    "/api/v1/home": {
+      "get": {
+        "summary": "Bölümlerin ayrı durumlarıyla kişisel ana sayfa",
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        }
+      }
+    },
+    "/api/v1/tracks/{id}": {
+      "get": {
+        "summary": "Kayıt bilgisi ve mevcut yerel sözler",
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrackDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz istek"
+          },
+          "409": {
+            "description": "Güncel durumla çakışma"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/import/spotify/jobs/{id}/rows/{rowId}/search": {
+      "post": {
+        "summary": "Adayları yeniden ara; kayıt seçimi ve liste sırası değişmez",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rowId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "maxLength": 300
+                  }
+                },
+                "required": [
+                  "query"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Adaylar güncellendi",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyImportJob"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/sessions/{id}": {
+      "get": {
+        "summary": "Poll online discovery without enqueueing downloads",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mix",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current catalog and excerpt-based results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discovery/sessions/{id}/retry": {
+      "post": {
+        "summary": "Retry failed excerpts only; bounded automatic retry and one-minute manual cooldown",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Discovery session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Retry cooldown"
+          }
+        }
+      }
+    },
+    "/api/v1/appearance": {
+      "get": {
+        "summary": "Ortak duvar kâğıdı, karartma ve saydamlık",
+        "responses": {
+          "200": {
+            "description": "Tüm cihazlarda ortak görünüm",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalAppearance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz görünüm ayarı"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Tüm cihazların görünüm ayarını değiştir",
+        "responses": {
+          "200": {
+            "description": "Tüm cihazlarda ortak görünüm",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalAppearance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz görünüm ayarı"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "dim": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 80
+                  },
+                  "transparency": {
+                    "type": "number",
+                    "minimum": 20,
+                    "maximum": 90
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/appearance/wallpaper": {
+      "put": {
+        "summary": "Ortak duvar kâğıdını yükle (en fazla 8 MiB JPG)",
+        "parameters": [
+          {
+            "name": "dim",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80
+            }
+          },
+          {
+            "name": "transparency",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 20,
+              "maximum": 90
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "image/jpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tüm cihazlarda ortak görünüm",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalAppearance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz görünüm ayarı"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Ortak duvar kâğıdını kaldır",
+        "responses": {
+          "200": {
+            "description": "Tüm cihazlarda ortak görünüm",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalAppearance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz görünüm ayarı"
+          }
+        }
+      }
+    },
+    "/api/v1/appearance/wallpaper/{name}": {
+      "get": {
+        "summary": "Değişmez JPG görseli",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}\\.jpg$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JPEG",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Görsel bulunamadı"
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "Geçerli üyelik oturumu",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberSession"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/auth/signup": {
+      "post": {
+        "summary": "Yeni üyelik oluştur ve giriş yap",
+        "responses": {
+          "201": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberSession"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemberCredentials"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Kullanıcı adı ve şifre ile giriş yap",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberSession"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemberCredentials"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "Geçerli oturumu kapat",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/collections": {
+      "get": {
+        "summary": "Sidewave hazır seçkileri (kişisel listelerden bağımsız)",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "listeler": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/EditorialCollection"
+                      }
+                    }
+                  },
+                  "required": [
+                    "listeler"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "memberSession": []
+          }
+        ]
+      }
+    },
+    "/api/v1/collections/{id}": {
+      "get": {
+        "summary": "Hazır seçkideki doğrulanmış katalog kayıtları",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditorialCollection"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "memberSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/discovery/weekly": {
+      "get": {
+        "summary": "İstanbul saatine göre pazartesi yenilenen kişisel keşif",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditorialCollection"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "memberSession": []
+          }
+        ]
+      }
+    },
+    "/api/v1/home/intro": {
+      "post": {
+        "summary": "Zaman diliminde bir kez selamlama, sonraki ziyaretlerde kaynaklı bir filozof sözü",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "visitId": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 80
+                  }
+                },
+                "required": [
+                  "visitId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hesap bazında saklanan, ziyaret kimliğiyle idempotent karşılama",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeIntroResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "İstek hatası (oturum yoksa 401)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "memberSession": []
+          }
+        ]
+      }
+    },
+    "/api/v1/mixes": {
+      "get": {
+        "summary": "Daily mixes for today (Europe/Istanbul)",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "day": {
+                      "type": "string"
+                    },
+                    "mixes": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DailyMix"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mixes/{id}": {
+      "get": {
+        "summary": "Daily mix with tracks",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyMix"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/playlists/{id}/recommendations": {
+      "get": {
+        "summary": "Songs that fit a playlist, excluding its recordings",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parcalar": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parca"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/tracks/{id}/lyrics": {
+      "get": {
+        "summary": "Synced or plain lyrics",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyncedLyrics"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/playback/loudness": {
+      "get": {
+        "summary": "Integrated loudness and levelling gain",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Loudness"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "kaynak",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/recommendations/dismissed-artists": {
+      "get": {
+        "summary": "Artists hidden from recommendations",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "artists": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "artist": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "created": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/diagnostics": {
+      "post": {
+        "summary": "Android crash report (stack frames only)",
+        "responses": {
+          "201": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "frames"
+                ],
+                "properties": {
+                  "version": {
+                    "type": "string"
+                  },
+                  "time": {
+                    "type": "integer"
+                  },
+                  "mainThread": {
+                    "type": "boolean"
+                  },
+                  "device": {
+                    "type": "string"
+                  },
+                  "sdk": {
+                    "type": "integer"
+                  },
+                  "frames": {
+                    "type": "string",
+                    "maxLength": 24000
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Recent crash reports (owner only)",
+        "responses": {
+          "200": {
+            "description": "Başarılı sonuç",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reports": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Yapılandırılmış hata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Parca": {
+        "type": "object",
+        "required": [
+          "id",
+          "baslik",
+          "kaynak"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "baslik": {
+            "type": "string"
+          },
+          "kaynak": {
+            "type": "string",
+            "enum": [
+              "kutuphane",
+              "youtube"
+            ]
+          },
+          "sanatci": {
+            "type": "string"
+          },
+          "album": {
+            "type": "string"
+          },
+          "sure": {
+            "type": "number"
+          },
+          "kapakId": {
+            "type": "string"
+          },
+          "kapakUrl": {
+            "type": "string"
+          },
+          "kapak": {
+            "type": "string"
+          },
+          "sanatciId": {
+            "type": "string"
+          },
+          "albumId": {
+            "type": "string"
+          },
+          "bicim": {
+            "type": "string"
+          },
+          "bitrate": {
+            "type": "number"
+          },
+          "parcaNo": {
+            "type": "integer"
+          },
+          "disk": {
+            "type": "integer"
+          },
+          "yil": {
+            "type": "integer"
+          },
+          "favori": {
+            "type": "boolean"
+          },
+          "entryId": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "reasonType": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "retryable",
+          "requestId"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        }
+      },
+      "Playlist": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ad": {
+            "type": "string"
+          },
+          "parcaSayisi": {
+            "type": "integer"
+          },
+          "sure": {
+            "type": "number"
+          },
+          "parcalar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          }
+        }
+      },
+      "Device": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "queue": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "index": {
+            "type": "integer"
+          },
+          "position": {
+            "type": "number"
+          },
+          "state": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "online": {
+            "type": "boolean"
+          },
+          "queueRevision": {
+            "type": "integer"
+          },
+          "handoffCommandId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ResolveRequest": {
+        "type": "object",
+        "properties": {
+          "parca": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parca"
+        ]
+      },
+      "ResolveResponse": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "fallbackUrl": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "kaynak": {
+            "type": "string",
+            "enum": [
+              "kutuphane",
+              "youtube"
+            ]
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "number"
+          },
+          "format": {
+            "type": "string"
+          },
+          "bitrate": {
+            "type": "number"
+          },
+          "parca": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "delivery": {
+            "type": "string",
+            "enum": [
+              "archive",
+              "temporary_cache",
+              "online"
+            ]
+          },
+          "readiness": {
+            "type": "string",
+            "enum": [
+              "source_ready",
+              "complete"
+            ]
+          },
+          "preparation": {
+            "$ref": "#/components/schemas/Preparation"
+          }
+        }
+      },
+      "PlaybackEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "occurredAt": {
+            "type": "number"
+          },
+          "queue": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "index": {
+            "type": "integer"
+          },
+          "deviceId": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "playing",
+              "started",
+              "paused",
+              "ended",
+              "error",
+              "buffering",
+              "skip",
+              "resume",
+              "summary",
+              "progress",
+              "cancelled",
+              "source_ready",
+              "first_bytes"
+            ]
+          },
+          "trackId": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "elapsedMs": {
+            "type": "number"
+          },
+          "position": {
+            "type": "number"
+          },
+          "parca": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "delivery": {
+            "type": "string"
+          },
+          "appVersion": {
+            "type": "string"
+          },
+          "playedMs": {
+            "type": "number"
+          },
+          "rebufferMs": {
+            "type": "number"
+          },
+          "rebuffers": {
+            "type": "number"
+          }
+        }
+      },
+      "ArchiveCandidate": {
+        "type": "object",
+        "properties": {
+          "candidateId": {
+            "type": "string"
+          },
+          "dosyaAdi": {
+            "type": "string"
+          },
+          "bicim": {
+            "type": "string"
+          },
+          "bitrate": {
+            "type": "number"
+          },
+          "sure": {
+            "type": "number"
+          },
+          "kullanici": {
+            "type": "string"
+          }
+        }
+      },
+      "ArchiveJob": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "trackKey": {
+            "type": "string"
+          },
+          "parca": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "durum": {
+            "type": "string",
+            "enum": [
+              "araniyor",
+              "eslesme_bekliyor",
+              "indirme_baslatiliyor",
+              "indiriliyor",
+              "dogrulaniyor",
+              "ice_aktariliyor",
+              "hazir",
+              "basarisiz",
+              "bulunamadi"
+            ]
+          },
+          "mesaj": {
+            "type": "string"
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArchiveCandidate"
+            }
+          },
+          "localTrack": {
+            "$ref": "#/components/schemas/Parca"
+          }
+        }
+      },
+      "ImportRow": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "baslik": {
+            "type": "string"
+          },
+          "sanatci": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "matched",
+              "ambiguous",
+              "unmatched",
+              "error"
+            ]
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "selected": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Parca"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Artist": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string"
+          },
+          "ad": {
+            "type": "string"
+          },
+          "kaynak": {
+            "type": "string",
+            "enum": [
+              "kutuphane",
+              "youtube"
+            ]
+          },
+          "takip": {
+            "type": "boolean"
+          },
+          "biyografi": {
+            "type": "string"
+          },
+          "gorselUrl": {
+            "type": "string"
+          },
+          "kapakId": {
+            "type": "string"
+          },
+          "abone": {
+            "type": "string"
+          },
+          "albumler": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Album"
+            }
+          },
+          "enCokDinlenen": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "benzer": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArtistReference"
+            }
+          },
+          "diskografiTam": {
+            "type": "boolean"
+          },
+          "stale": {
+            "type": "boolean"
+          },
+          "warning": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "integer"
+          },
+          "parcalar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "parcaBasligi": {
+            "type": "string"
+          },
+          "catalogWarning": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "appId",
+          "ad",
+          "kaynak",
+          "takip"
+        ]
+      },
+      "ArtistReference": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ad": {
+            "type": "string"
+          },
+          "kaynak": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ad"
+        ]
+      },
+      "Album": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string"
+          },
+          "ad": {
+            "type": "string"
+          },
+          "kaynak": {
+            "type": "string",
+            "enum": [
+              "kutuphane",
+              "youtube"
+            ]
+          },
+          "kayitli": {
+            "type": "boolean"
+          },
+          "sanatci": {
+            "type": "string"
+          },
+          "sanatciId": {
+            "type": "string"
+          },
+          "yil": {
+            "type": "integer"
+          },
+          "kapak": {
+            "type": "string"
+          },
+          "kapakId": {
+            "type": "string"
+          },
+          "parcaSayisi": {
+            "type": "integer"
+          },
+          "toplamSure": {
+            "type": "integer"
+          },
+          "tur": {
+            "type": "string"
+          },
+          "parcalar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "stale": {
+            "type": "boolean"
+          },
+          "warning": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "appId",
+          "ad",
+          "kaynak",
+          "kayitli"
+        ]
+      },
+      "Library": {
+        "type": "object",
+        "properties": {
+          "sanatcilar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Artist"
+            }
+          },
+          "albumler": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Album"
+            }
+          }
+        },
+        "required": [
+          "sanatcilar",
+          "albumler"
+        ]
+      },
+      "ReleasePage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Album"
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "nextOffset": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "warning": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "nextOffset",
+          "complete"
+        ]
+      },
+      "SonicAnalysis": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "total": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "model": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "serviceVersion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "count",
+          "total",
+          "model"
+        ]
+      },
+      "DiscoveryCapabilities": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "method": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "analysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SonicAnalysis"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "available",
+          "method",
+          "source",
+          "state",
+          "message",
+          "analysis"
+        ]
+      },
+      "SonicMatch": {
+        "type": "object",
+        "properties": {
+          "parca": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "similarity": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Ses benzerliği 0..1; bilinmeyen veya -1 için null. Path değeri başlangıca göredir, komşu geçişe göre değildir."
+          },
+          "method": {
+            "type": "string",
+            "description": "catalog or audio_excerpt for online discovery; no fabricated score for catalog relationships."
+          }
+        },
+        "required": [
+          "parca",
+          "similarity"
+        ]
+      },
+      "DiscoveryResult": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "scoreMeaning": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "seed": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "matches": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SonicMatch"
+            }
+          },
+          "parcalar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "sanatcilar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Artist"
+            }
+          },
+          "analysis": {
+            "$ref": "#/components/schemas/DiscoveryAnalysis"
+          }
+        },
+        "required": [
+          "method",
+          "source"
+        ]
+      },
+      "ReleaseFeed": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Album"
+            }
+          },
+          "warning": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "followedCount": {
+            "type": "integer"
+          },
+          "coveredArtists": {
+            "type": "integer"
+          },
+          "stale": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "refreshing": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "warning",
+          "followedCount",
+          "coveredArtists"
+        ]
+      },
+      "AnalysisJob": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "idle",
+              "busy",
+              "submitted",
+              "waiting",
+              "unsupported"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "taskId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "submittedAt": {
+            "type": "integer"
+          },
+          "trackCount": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "SpotifyImportCounts": {
+        "type": "object",
+        "required": [
+          "total",
+          "pending",
+          "selected",
+          "unsupported",
+          "ambiguous",
+          "unmatched",
+          "errors"
+        ],
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "pending": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "selected": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unsupported": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ambiguous": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unmatched": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errors": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SpotifyImportCollection": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "total",
+          "pending",
+          "selected"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "playlist",
+              "favorites"
+            ]
+          },
+          "total": {
+            "type": "integer"
+          },
+          "pending": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "selected": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "canBeFavorites": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SpotifyImportedPlaylist": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "SpotifyImportCommit": {
+        "type": "object",
+        "required": [
+          "added",
+          "favorites",
+          "playlists",
+          "at"
+        ],
+        "properties": {
+          "added": {
+            "type": "integer"
+          },
+          "favorites": {
+            "type": "integer"
+          },
+          "playlists": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpotifyImportedPlaylist"
+            }
+          },
+          "at": {
+            "type": "integer"
+          }
+        }
+      },
+      "SpotifyImportJob": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "state",
+          "createdAt",
+          "warnings",
+          "hasLibrary",
+          "hasPlaylists",
+          "collections",
+          "counts",
+          "lastCommit"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "matching",
+              "paused",
+              "ready",
+              "committed"
+            ]
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasLibrary": {
+            "type": "boolean"
+          },
+          "hasPlaylists": {
+            "type": "boolean"
+          },
+          "collections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpotifyImportCollection"
+            }
+          },
+          "counts": {
+            "$ref": "#/components/schemas/SpotifyImportCounts"
+          },
+          "lastCommit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpotifyImportCommit"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SpotifyImportRow": {
+        "type": "object",
+        "required": [
+          "id",
+          "collectionId",
+          "position",
+          "baslik",
+          "sanatci",
+          "album",
+          "spotifyUri",
+          "sourceKey",
+          "sure",
+          "status",
+          "candidates",
+          "selected",
+          "applied"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "collectionId": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "baslik": {
+            "type": "string"
+          },
+          "sanatci": {
+            "type": "string"
+          },
+          "album": {
+            "type": "string"
+          },
+          "spotifyUri": {
+            "type": "string"
+          },
+          "sourceKey": {
+            "type": "string"
+          },
+          "sure": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "matched",
+              "ambiguous",
+              "unmatched",
+              "error",
+              "unsupported"
+            ]
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "selected": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Parca"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "applied": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SpotifyImportPage": {
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "nextOffset"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpotifyImportRow"
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "nextOffset": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "AndroidRelease": {
+        "type": "object",
+        "required": [
+          "packageName",
+          "versionCode",
+          "versionName",
+          "minSdk",
+          "sizeBytes",
+          "sha256",
+          "certificateSha256",
+          "url",
+          "notes",
+          "publishedAt"
+        ],
+        "properties": {
+          "packageName": {
+            "type": "string"
+          },
+          "versionCode": {
+            "type": "integer"
+          },
+          "versionName": {
+            "type": "string"
+          },
+          "minSdk": {
+            "type": "integer"
+          },
+          "sizeBytes": {
+            "type": "integer"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "certificateSha256": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "publishedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Preparation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "warming",
+              "ready",
+              "failed",
+              "cancelled",
+              "interrupted",
+              "disabled",
+              "expired"
+            ]
+          },
+          "priority": {
+            "type": "string"
+          },
+          "delivery": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "state"
+        ]
+      },
+      "CacheStatus": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "capacityBytes": {
+            "type": "number"
+          },
+          "usedBytes": {
+            "type": "number"
+          },
+          "maxAgeDays": {
+            "type": "number"
+          },
+          "entries": {
+            "type": "number"
+          },
+          "activeFills": {
+            "type": "number"
+          },
+          "queued": {
+            "type": "number"
+          },
+          "pinned": {
+            "type": "number"
+          },
+          "maxEntryBytes": {
+            "type": "number"
+          },
+          "reserveBytes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "enabled",
+          "capacityBytes",
+          "usedBytes",
+          "entries"
+        ]
+      },
+      "TrackDetails": {
+        "type": "object",
+        "properties": {
+          "parca": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "delivery": {
+            "type": "string"
+          },
+          "format": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bitrate": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "lyrics": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "credits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArtistReference"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": [
+          "parca",
+          "delivery"
+        ]
+      },
+      "HomeResponse": {
+        "type": "object",
+        "properties": {
+          "sections": {
+            "$ref": "#/components/schemas/HomeSections"
+          }
+        },
+        "required": [
+          "sections"
+        ]
+      },
+      "TracksSection": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "stale",
+              "error"
+            ]
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parca"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "state",
+          "data"
+        ]
+      },
+      "PlaylistsSection": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "stale",
+              "error"
+            ]
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "state",
+          "data"
+        ]
+      },
+      "ResumeSection": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "stale",
+              "error"
+            ]
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Device"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "state",
+          "data"
+        ]
+      },
+      "ReleasesSection": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "stale",
+              "error"
+            ]
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReleaseFeed"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "state",
+          "data"
+        ]
+      },
+      "HomeSections": {
+        "type": "object",
+        "properties": {
+          "resume": {
+            "$ref": "#/components/schemas/ResumeSection"
+          },
+          "recent": {
+            "$ref": "#/components/schemas/TracksSection"
+          },
+          "playlists": {
+            "$ref": "#/components/schemas/PlaylistsSection"
+          },
+          "forYou": {
+            "$ref": "#/components/schemas/TracksSection"
+          },
+          "rediscover": {
+            "$ref": "#/components/schemas/TracksSection"
+          },
+          "followed": {
+            "$ref": "#/components/schemas/ReleasesSection"
+          }
+        },
+        "required": [
+          "resume",
+          "recent",
+          "playlists",
+          "forYou",
+          "rediscover",
+          "followed"
+        ]
+      },
+      "DiscoveryAnalysis": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "failed": {
+            "type": "integer"
+          },
+          "sampleSeconds": {
+            "type": "integer"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "completed",
+          "total",
+          "failed",
+          "message"
+        ]
+      },
+      "GlobalAppearance": {
+        "type": "object",
+        "properties": {
+          "wallpaperUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dim": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 80
+          },
+          "transparency": {
+            "type": "number",
+            "minimum": 20,
+            "maximum": 90
+          },
+          "configured": {
+            "type": "boolean"
+          },
+          "revision": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "wallpaperUrl",
+          "dim",
+          "transparency",
+          "configured"
+        ]
+      },
+      "Member": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "boolean",
+            "description": "True for the library owner, who can archive music and use Soulseek."
+          }
+        },
+        "required": [
+          "id",
+          "username"
+        ]
+      },
+      "MemberSession": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Member"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "firstAccount": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "user"
+        ]
+      },
+      "MemberCredentials": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "EditorialCollection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ad": {
+            "type": "string"
+          },
+          "tur": {
+            "type": "string"
+          },
+          "renk": {
+            "type": "string"
+          },
+          "aciklama": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "editable": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "parcaSayisi": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "parcalar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          },
+          "week": {
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "number"
+          },
+          "refreshAt": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "personalized": {
+            "type": "boolean"
+          },
+          "partial": {
+            "type": "boolean"
+          },
+          "stale": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "addedCount": {
+            "type": "integer"
+          },
+          "kapak": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ad",
+          "owner",
+          "editable"
+        ]
+      },
+      "PhilosopherQuote": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "work": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "author",
+          "work",
+          "source"
+        ]
+      },
+      "HomeIntroResponse": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "greeting",
+              "quote"
+            ]
+          },
+          "period": {
+            "type": "string"
+          },
+          "greeting": {
+            "type": "string"
+          },
+          "quote": {
+            "$ref": "#/components/schemas/PhilosopherQuote"
+          }
+        },
+        "required": [
+          "kind",
+          "period"
+        ]
+      },
+      "DailyMix": {
+        "type": "object",
+        "required": [
+          "id",
+          "ad",
+          "altyazi",
+          "renk",
+          "parcaSayisi"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ad": {
+            "type": "string"
+          },
+          "altyazi": {
+            "type": "string"
+          },
+          "renk": {
+            "type": "string"
+          },
+          "kapak": {
+            "$ref": "#/components/schemas/Parca"
+          },
+          "parcaSayisi": {
+            "type": "integer"
+          },
+          "parcalar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parca"
+            }
+          }
+        }
+      },
+      "Loudness": {
+        "type": "object",
+        "properties": {
+          "lufs": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "gain": {
+            "type": "number",
+            "description": "Attenuation towards -14 LUFS, never above 1."
+          },
+          "pending": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SyncedLyrics": {
+        "type": "object",
+        "properties": {
+          "synced": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LyricLine"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "plain": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instrumental": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "lrclib or library"
+          }
+        }
+      },
+      "LyricLine": {
+        "type": "object",
+        "required": [
+          "t",
+          "text"
+        ],
+        "properties": {
+          "t": {
+            "type": "number",
+            "description": "Seconds from the start"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "memberSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sidewave_music_session",
+        "description": "Giriş veya kayıt yanıtı HttpOnly, SameSite=Lax oturum çerezini ayarlar. Yazma istekleri aynı origin üzerinden gönderilmelidir."
+      }
+    }
+  },
+  "security": [
+    {
+      "memberSession": []
+    }
+  ]
+}

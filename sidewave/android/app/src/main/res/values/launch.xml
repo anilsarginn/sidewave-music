@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.Sidewave.Launch" parent="Theme.Sidewave">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">#081710</item>
+        <item name="android:navigationBarColor">#081710</item>
+    </style>
+</resources>

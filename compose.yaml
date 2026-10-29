@@ -1,0 +1,68 @@
+name: sidewave
+
+services:
+  sidewave:
+    build: ./sidewave
+    image: sidewave:local
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:${PORT:-4444}:4444"
+    environment:
+      NODE_ENV: production
+      PORT: 4444
+      TZ: ${TZ:-UTC}
+      MUSIC_PUBLIC_ORIGIN: ${MUSIC_PUBLIC_ORIGIN:-}
+      DATABASE_PATH: /app/data/sidewave.sqlite
+      MUSIC_ROOT: /music
+      JOBS_ROOT: /jobs
+      YTRES_URL: http://ytres:4455
+      NAVIDROME_URL: ${NAVIDROME_URL:-http://navidrome:4533}
+      NAVIDROME_USER: ${NAVIDROME_USER:-}
+      NAVIDROME_PASS: ${NAVIDROME_PASS:-}
+      ARCHIVE_DISABLED: ${ARCHIVE_DISABLED:-1}
+      SLSKD_URL: ${SLSKD_URL:-http://slskd:5030}
+      SLSKD_API_KEY: ${SLSKD_API_KEY:-}
+      ONLINE_SONIC_URL: ${ONLINE_SONIC_URL:-}
+      AUDIOMUSE_URL: ${AUDIOMUSE_URL:-}
+      AUDIOMUSE_TOKEN: ${AUDIOMUSE_TOKEN:-}
+      SONIC_NAVIDROME_URL: ${SONIC_NAVIDROME_URL:-}
+      ANDROID_CERTIFICATE_SHA256: ${ANDROID_CERTIFICATE_SHA256:-}
+    volumes:
+      - app-data:/app/data
+      - jobs:/jobs
+      - ${MUSIC_LIBRARY_PATH:-./library}:/music/library:ro
+    depends_on:
+      ytres:
+        condition: service_healthy
+
+  ytres:
+    build: ./ytres
+    image: sidewave-resolver:local
+    restart: unless-stopped
+    environment:
+      PORT: 4455
+      RESOLVE_TIMEOUT_SECONDS: 12
+    expose: ["4455"]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:4455/saglik', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+
+  navidrome:
+    profiles: ["library"]
+    image: deluan/navidrome:0.64.2
+    restart: unless-stopped
+    ports: ["127.0.0.1:${NAVIDROME_PORT:-4533}:4533"]
+    environment:
+      ND_SCANSCHEDULE: 1h
+      ND_LOGLEVEL: info
+    volumes:
+      - navidrome-data:/data
+      - ${MUSIC_LIBRARY_PATH:-./library}:/music:ro
+
+volumes:
+  app-data:
+  jobs:
+  navidrome-data:

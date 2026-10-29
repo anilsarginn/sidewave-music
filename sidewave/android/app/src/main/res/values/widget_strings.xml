@@ -1,0 +1,5 @@
+<resources>
+    <string name="widget_mini_description">Cover art and essential playback controls.</string>
+    <string name="widget_player_description">Your music, playback controls and Liked Songs.</string>
+    <string name="widget_library_description">Now playing and three recently played tracks.</string>
+</resources>
