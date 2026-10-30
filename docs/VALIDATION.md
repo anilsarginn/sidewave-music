@@ -23,3 +23,9 @@ Browser checks passed with one worker. Earlier concurrent runs showed intermitte
 Screenshots and the silent demo use synthetic metadata and bundled artwork. Browser tests mock providers; they do not establish real provider access. The default Docker setup was checked without a music collection or optional Navidrome/audio-analysis services. The development APK is not a production-signed release. Physical phone, long background playback, Bluetooth and car/head-unit acceptance remain manual checks.
 
 Secret scanning is a point-in-time automated check, not a guarantee of security. Personal installation data and previous Git history are excluded from this repository.
+
+## Presentation refresh — 30 October 2026
+
+The refreshed web gallery was captured with the Anıl demo profile and Midnight Coast background. The capture script verified the selected appearance, expected screens, loaded artwork, no browser page errors, no external API requests and no document overflow. Car images were captured from the actual shared Media3 browser in a fresh Automotive OS 13 emulator using synthetic catalog data and silent sample audio; see [gallery provenance](screenshots/README.md).
+
+The mobile track-menu focus now uses `preventScroll`, so focusing a menu item does not scroll the page. Queued scroll events from revealing the trigger are ignored unless the scroll position changes after opening. The existing mobile queue/menu test passed eight consecutive runs; all 89 applicable desktop/mobile browser tests and 51 web unit tests passed, and the production build passed. CI explicitly requests `platform-tools` during Android setup to avoid the retired `tools` package.
