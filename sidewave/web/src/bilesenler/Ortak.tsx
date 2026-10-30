@@ -146,7 +146,19 @@ export function ParcaMenu({ parca, listeler, onYenile }: {
     };
     const escape = (e: KeyboardEvent) => { if (e.key === "Escape") { e.preventDefault(); setAcik(false); tetik.current?.focus(); } };
     const close = () => setAcik(false);
-    const scroll = (e: Event) => { if (!(e.target instanceof Node) || !menu.current?.contains(e.target)) setAcik(false); };
+    // Revealing the trigger can queue a scroll event before its click opens the
+    // menu. Only a position change after opening should dismiss the menu.
+    const scrollPositions = new Map<Element, {left: number; top: number}>();
+    for (let node: Element | null = kutu.current; node; node = node.parentElement) {
+      scrollPositions.set(node, {left: node.scrollLeft, top: node.scrollTop});
+    }
+    const scroll = (e: Event) => {
+      const target = e.target instanceof Element ? e.target : document.scrollingElement;
+      if (!target || menu.current?.contains(target)) return;
+      const initial = scrollPositions.get(target);
+      if (initial && target.scrollLeft === initial.left && target.scrollTop === initial.top) return;
+      setAcik(false);
+    };
     document.addEventListener("mousedown", f);
     document.addEventListener("keydown", escape);
     window.addEventListener("resize", close);

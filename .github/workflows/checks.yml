@@ -25,6 +25,12 @@ jobs:
         working-directory: sidewave/web
       - run: npm run test:e2e -- --workers=1
         working-directory: sidewave/web
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-test-results
+          path: sidewave/web/test-results/
+          retention-days: 3
   resolver:
     runs-on: ubuntu-latest
     steps:
