@@ -140,7 +140,7 @@ export function ParcaMenu({ parca, listeler, onYenile }: {
 
   useEffect(() => {
     if (!acik) return;
-    menu.current?.querySelector<HTMLButtonElement>('[role="menuitem"]:not(:disabled)')?.focus();
+    menu.current?.querySelector<HTMLButtonElement>('[role="menuitem"]:not(:disabled)')?.focus({preventScroll: true});
     const f = (e: MouseEvent) => {
       if (!kutu.current?.contains(e.target as Node) && !menu.current?.contains(e.target as Node)) setAcik(false);
     };
