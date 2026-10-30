@@ -13,7 +13,7 @@
 
 ![Sidewave home — Welcome back, Anıl, with the Midnight Coast background](docs/screenshots/web.png)
 
-Sidewave brings your collection, online discoveries, playlists and listening history into a music space you host yourself. Start with a favourite track, find a new direction, and keep the discoveries that feel like you. Built by **Anıl Sargın at Sargın Labs**.
+Sidewave brings your collection, online discoveries, playlists and listening history into a music space you host yourself. Start with a favourite track, find a new direction, and keep the discoveries that feel like you.
 
 **[Watch the interface tour →](docs/screenshots/demo.mp4)**
 
